@@ -6,11 +6,11 @@ const isScrolled = ref(false)
 const isMobileMenuOpen = ref(false)
 
 const navLinks = [
-  { name: '产品', href: '#features' },
-  { name: '解决方案', href: '#solutions' },
-  { name: '定价', href: '#pricing' },
-  { name: '文档', href: '#docs' },
-  { name: '博客', href: '#blog' },
+  { name: '产品', href: '#features', type: 'anchor' },
+  { name: '解决方案', href: '/solutions', type: 'route' },
+  { name: '定价', href: '/pricing', type: 'route' },
+  { name: '文档', href: '/docs', type: 'route' },
+  { name: '博客', href: '/blog', type: 'route' },
 ]
 
 const handleScroll = () => {
@@ -39,22 +39,30 @@ const toggleMobileMenu = () => {
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16 md:h-20">
-        <div class="flex items-center space-x-2">
+        <router-link to="/" class="flex items-center space-x-2">
           <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
             <span class="text-white font-bold text-sm">T</span>
           </div>
           <span class="text-xl font-semibold text-white">TRAE</span>
-        </div>
+        </router-link>
 
         <nav class="hidden md:flex items-center space-x-8">
-          <a
-            v-for="link in navLinks"
-            :key="link.name"
-            :href="link.href"
-            class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium"
-          >
-            {{ link.name }}
-          </a>
+          <template v-for="link in navLinks" :key="link.name">
+            <a
+              v-if="link.type === 'anchor'"
+              :href="link.href"
+              class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium"
+            >
+              {{ link.name }}
+            </a>
+            <router-link
+              v-else
+              :to="link.href"
+              class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium"
+            >
+              {{ link.name }}
+            </router-link>
+          </template>
         </nav>
 
         <div class="hidden md:flex items-center space-x-4">
@@ -81,15 +89,24 @@ const toggleMobileMenu = () => {
       class="md:hidden bg-black/90 backdrop-blur-md border-t border-white/10"
     >
       <nav class="px-4 py-4 space-y-3">
-        <a
-          v-for="link in navLinks"
-          :key="link.name"
-          :href="link.href"
-          class="block py-2 text-gray-300 hover:text-white transition-colors"
-          @click="isMobileMenuOpen = false"
-        >
-          {{ link.name }}
-        </a>
+        <template v-for="link in navLinks" :key="link.name">
+          <a
+            v-if="link.type === 'anchor'"
+            :href="link.href"
+            class="block py-2 text-gray-300 hover:text-white transition-colors"
+            @click="isMobileMenuOpen = false"
+          >
+            {{ link.name }}
+          </a>
+          <router-link
+            v-else
+            :to="link.href"
+            class="block py-2 text-gray-300 hover:text-white transition-colors"
+            @click="isMobileMenuOpen = false"
+          >
+            {{ link.name }}
+          </router-link>
+        </template>
         <div class="pt-4 border-t border-white/10 space-y-3">
           <button class="w-full py-2 text-gray-300 hover:text-white transition-colors text-left">
             登录
